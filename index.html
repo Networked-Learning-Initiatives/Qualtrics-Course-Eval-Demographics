@@ -1,0 +1,28 @@
+<br />
+<script>
+//create Qualtrics.SurveyEngine.QuestionData object
+Qualtrics.SurveyEngine.addOnload(function () {
+    console.log("michael's custom code is running!");
+    console.log(window.location);
+    console.log(window.location.hash);
+    
+    var InputId = $("QR~Q1");
+    var Text = "your name";
+    InputId.value = Text;
+     
+    InputId.onclick = clear;
+    InputId.onblur = repopulate;
+      
+    function repopulate() {
+        if (InputId.value == "") {
+          InputId.value= Text;
+        } 
+    }
+     
+    function clear() {
+        if (InputId.value == Text) {
+          InputId.value= "";
+        }
+    }
+});
+</script>
