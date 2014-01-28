@@ -1,28 +1,156 @@
 <br />
 <script>
-//create Qualtrics.SurveyEngine.QuestionData object
+//to use this, edit your qualtrics survey, go to "Look and Feel", 
+//Choose advanced, near "Header", click edit, 
+//then click the "<>source" button, 
+//and finally, paste ALL OF THIS (the entire contents of this file) in the box.
 Qualtrics.SurveyEngine.addOnload(function () {
-    console.log("michael's custom code is running!");
-    console.log(window.location);
-    console.log(window.location.hash);
-    
-    var InputId = $("QR~Q1");
-    var Text = "your name";
-    InputId.value = Text;
-     
-    InputId.onclick = clear;
-    InputId.onblur = repopulate;
-      
-    function repopulate() {
-        if (InputId.value == "") {
-          InputId.value= Text;
-        } 
-    }
-     
-    function clear() {
-        if (InputId.value == Text) {
-          InputId.value= "";
+
+    var surveyInfo = {
+        position: {
+            id: 'QID4',
+            'Student': 1,
+            'Staff': 2,
+            'Faculty': 3
+        },
+        college: {
+            id: 'QID1',
+            'College of Agriculture and Life' : 1,
+            'College of Architecture and Urban' : 2,
+            'Pamplin College of Business' : 3,
+            'College of Engineering' : 4,
+            'College of Liberal Arts and Human Sciences' : 5,
+            'College of Natural Resources and' : 6,
+            'College of Science': 7,
+            'Virginia-Maryland Regional College of Veterinary Medicine' : 8
+        },
+        department: {
+            id: 'QID3',
+            "Accounting and Information Systems" : 1,
+            "Aerospace Engineering" : 2,
+            "Agribusiness" : 3,
+            "Agricultural and Applied Economics" : 4,
+            "Agricultural Sciences" : 5,
+            "Agricultural Technology" : 6,
+            "Agriculture Undecided" : 7,
+            "Animal and Poultry Sciences" : 8,
+            "Apparel, Housing, and Resource Management" : 9,
+            "Applied Economic Management" : 10,
+            "Architecture" : 11,
+            "Art History; Studio Art; and Visual Communication &amp; Graphic Design" : 12,
+            "Biochemistry (Agriculture &amp; Life Sciences)" : 13,
+            "Biochemistry (Science)" : 14,
+            "Biological Sciences" : 15,
+            "Biological Systems Engineering" : 16,
+            "Biology" : 17,
+            "Building Construction" : 18,
+            "Business (undecided)" : 19,
+            "Business Information Systems" : 20,
+            "Business Information Technology" : 21,
+            "Chemical Engineering" : 22,
+            "Chemistry" : 23,
+            "Civil and Environmental Engineering" : 24,
+            "Classical Studies" : 25,
+            "Communication" : 26,
+            "Computer Engineering" : 27,
+            "Computer Science" : 28,
+            "Construction Engineering and Management" : 29,
+            "Crop and Soil Environmental Sciences" : 30,
+            "Dairy Science" : 31,
+            "Decision Support Systems" : 32,
+            "Economics (Business)" : 33,
+            "Economics (Science)" : 34,
+            "Electrical Engineering" : 35,
+            "Engineering" : 36,
+            "Engineering Science and Mechanics" : 37,
+            "English" : 38,
+            "Environmental Policy and Planning" : 39,
+            "Environmental Resources Management" : 40,
+            "Environmental Science" : 41,
+            "Finance" : 42,
+            "Fisheries Science" : 43,
+            "Food Science and Technology" : 44,
+            "Foreign Languages and Literatures" : 45,
+            "Forestry" : 46,
+            "French" : 47,
+            "General Engineering" : 48,
+            "Geography" : 49,
+            "Geology" : 50,
+            "Geosciences" : 51,
+            "German" : 52,
+            "Graphic Design" : 53,
+            "History" : 54,
+            "Horticulture" : 55,
+            "Hospitality and Tourism Management" : 56,
+            "Human Development" : 57,
+            "Human Nutrition, Foods and Exercise" : 58,
+            "Humanities, Science, and Environment" : 59,
+            "Industrial and Systems Engineering" : 60,
+            "Industrial Design" : 61,
+            "Information Systems" : 62,
+            "Interdisciplinary Studies" : 63,
+            "Interior Design" : 64,
+            "International Studies" : 65,
+            "Landscape Architecture" : 66,
+            "Life Sciences Undecided" : 67,
+            "Management" : 68,
+            "Management Information Systems" : 69,
+            "Management Science" : 70,
+            "Marketing" : 71,
+            "Materials Science and Engineering" : 72,
+            "Mathematics" : 73,
+            "Mechanical Engineering" : 74,
+            "Meteorology" : 75,
+            "Mining Engineering" : 76,
+            "Music" : 77,
+            "Natural Resources (undecided)" : 78,
+            "Natural Resources Conservation" : 79,
+            "Ocean Engineering" : 80,
+            "Operations Management" : 81,
+            "Philosophy" : 82,
+            "Physics" : 83,
+            "Political Science" : 84,
+            "Pre-Health Professions" : 85,
+            "Pre-Law" : 86,
+            "Pre-Veterinary Medicine" : 87,
+            "Psychology" : 88,
+            "Public and Urban Affairs" : 89,
+            "Sociology" : 90,
+            "Spanish" : 91,
+            "Statistics" : 92,
+            "Studio Art" : 93,
+            "Systems Assurance" : 94,
+            "Teacher Education" : 95,
+            "Theatre and Cinema" : 96,
+            "University Studies" : 97,
+            "Wildlife Science" : 98,
+            "Wood Science and Forest Products" : 99
         }
-    }
+    };
+    // console.log("michael's custom code is running!");
+    // console.log(window.location);
+    // console.log(window.location.hash);
+
+    // remove the leading # and parse the params
+    // http://prototypejs.org/doc/latest/language/String/prototype/toQueryParams/
+    var prepopulatedUserInfo = window.location.hash.slice(1).toQueryParams('&');
+
+
+    console.log(surveyInfo);
+    console.log(prepopulatedUserInfo);
+
+    // for each piece of info provided by banner (via location hash)
+    Object.keys(prepopulatedUserInfo).each(function(infoItem) {
+        console.log(infoItem);
+        if (infoItem == 'position') {
+            var questionId = "QR~"+surveyInfo[infoItem].id+"~"+surveyInfo[infoItem][prepopulatedUserInfo[infoItem]];
+            var InputId = document.getElementById(questionId);
+            InputId.checked = true;
+        } else {
+            var questionId = "QR~"+surveyInfo[infoItem].id;
+            var InputId = document.getElementById(questionId);
+            InputId.value = questionId + "~" + surveyInfo[infoItem][prepopulatedUserInfo[infoItem]];
+        }
+    });
 });
 </script>
